@@ -1,61 +1,70 @@
+import m from "mithril";
 import Stream from "mithril-stream";
-import { CartStorage } from "../services/cartStorage";
-
-const stream = Stream.bind(this);
-
+import { CONSTANTS } from "../utils/constants.js";
+import { Utils } from "../utils/helpers.js";
+import { Storage } from "../utils/storage.js";
+import { Notification } from "./notification.js";
 export const Cart = {
-  products: stream(CartStorage.load()),
-
-  notification: stream(null),
-
-  addProduct(product) {
-    
-    const existingItem = this.products.find((i) => i.id === product.id);
-
-    this.products(
-      existingItem
-        ? this.products.map((p) =>
-            p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-          )
-        : [...this.products, { ...product, quantity: 1 }]
+  items: Stream([]),
+  add(p) {
+    if (!p || !p.id || p.stock <= 0) {
+      Notification.show("Product unavailable", "error");
+      return false;
+    }
+    const c = Cart.items();
+    const e = c.find((i) => i.id === p.id);
+    if (e) {
+      if (e.quantity >= p.stock || e.quantity >= CONSTANTS.MAX_QUANTITY) {
+        Notification.show("Cannot add more", "error");
+        return false;
+      }
+      Cart.items(
+        c.map((i) => (i.id === p.id ? { ...i, quantity: i.quantity + 1 } : i))
+      );
+    } else {
+      Cart.items([...c, { ...p, quantity: 1 }]);
+    }
+    Cart.save();
+    Notification.show(`${p.name} added!`);
+    return true;
+  },
+  remove(id) {
+    const i = Cart.items().find((x) => x.id === id);
+    if (i) {
+      Cart.items(Cart.items().filter((x) => x.id !== id));
+      Cart.save();
+      Notification.show(`${i.name} removed`);
+    }
+  },
+  updateQuantity(id, q) {
+    const v = Utils.validateQuantity(q);
+    const i = Cart.items().find((x) => x.id === id);
+    if (!i) return;
+    if (v > i.stock) {
+      Notification.show(`Only ${i.stock} available`, "error");
+      return;
+    }
+    Cart.items(
+      Cart.items().map((x) => (x.id === id ? { ...x, quantity: v } : x))
     );
-
-    CartStorage.save(this.products);
-
-    this.notification(`Added ${product.name} to cart.`);
-
-    setTimeout(() => this.notification(null), 1000);
+    Cart.save();
   },
-
-  removeProductById(productId) {
-    this.products(this.products.filter((i) => i.id !== productId));
+  clear() {
+    Cart.items([]);
+    Cart.save();
+    Notification.show("Cart cleared");
   },
-
-  updateProductsQuantity(productId, quantity) {
-    this.products(
-      this.products.map((product) =>
-        product.id === productId ? { ...product, quantity: quantity } : product
-      )
-    );
-    CartStorage.save(this.products);
+  getTotal() {
+    return Cart.items().reduce((t, i) => t + i.price * i.quantity, 0);
   },
-
-  totalPrice() {
-    return this.products.reduce(
-      (total, product) => total + product.price * product.quantity,
-      0
-    );
+  getCount() {
+    return Cart.items().reduce((c, i) => c + i.quantity, 0);
   },
-
-  totalCount() {
-    return this.products.reduce(
-      (total, product) => total + product.quantity,
-      0
-    );
+  save() {
+    Storage.save(CONSTANTS.STORAGE_KEY, Cart.items());
   },
-
-  clearProducts() {
-    this.products([]);
-    CartStorage.save(this.products);
+  load() {
+    const s = Storage.load(CONSTANTS.STORAGE_KEY);
+    if (s && Array.isArray(s)) Cart.items(s);
   },
 };

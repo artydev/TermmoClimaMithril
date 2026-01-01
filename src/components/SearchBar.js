@@ -1,0 +1,1 @@
+import m from'mithril';import{Product}from'../models/product.js';import{Utils}from'../utils/helpers.js';export const SearchBar={view(){return m('div.search-container',m('input.search-input[type=search]',{placeholder:'Search products...',value:Product.searchTerm(),oninput:Utils.debounce(e=>Product.searchTerm(e.target.value),300)}),m('span.search-icon','🔍'))}};

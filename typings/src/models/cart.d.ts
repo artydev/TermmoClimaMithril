@@ -1,18 +1,20 @@
 
 declare interface CartType {
-	static products: any;
+	static items: any[];
 
-	static notification: any;
+	add(p: any): boolean;
 
-	addProduct(product: any): any;
+	remove(id: any): void;
 
-	setTimeout(this: any, notification: any, null: any, 1000: any, removeProductById: any, productId: any): any;
+	updateQuantity(id: any, q: any): null;
 
-	updateProductsQuantity(productId: any, quantity: any): any;
+	clear(): void;
 
-	totalPrice(): any;
+	getTotal(): Function;
 
-	totalCount(): any;
+	getCount(): Function;
 
-	clearProducts(): any;
+	save(): void;
+
+	load(): void;
 }
