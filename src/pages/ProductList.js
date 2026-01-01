@@ -9,8 +9,17 @@ import { SearchBar } from "../components/SearchBar.js";
 import { FilterControls } from "../components/FilterControls.js";
 export const ProductList = {
   oninit() {
-    if (Product.list().length === 0) Product.loadAll();
+    const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+    const lastFetch = Product.lastFetchTime || 0;
+    const now = Date.now();
+
+    if (Product.list().length === 0 || now - lastFetch > CACHE_DURATION_MS) {
+        Product.loadAll().then(() => {
+            Product.lastFetchTime = Date.now();
+        });
+    }
   },
+  
   view() {
     const l = Product.loading(),
       e = Product.error(),
