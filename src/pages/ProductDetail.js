@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { Product } from '../models/product.js';
+import { Products } from '../models/products.js';
 import { Cart } from '../models/cart.js';
 import { CONSTANTS } from '../utils/constants.js';
 import { Utils } from '../utils/helpers.js';
@@ -15,12 +15,12 @@ export const ProductDetail = {
     const productId = parseInt(vnode.attrs.id, 10);
     
     // Check if product is already in the cached list
-    const cachedProduct = Product.getById(productId);
+    const cachedProduct = Products.getById(productId);
     
     if (!cachedProduct) {
       // If not in cache, fetch from API
-      Product.loadById(productId).catch(() => {
-        // Error is already handled in Product.loadById
+      Products.loadById(productId).catch(() => {
+        // Error is already handled in Products.loadById
         // Just trigger a redraw to show error message
         m.redraw();
       });
@@ -32,9 +32,9 @@ export const ProductDetail = {
    */
   view(vnode) {
     const productId = parseInt(vnode.attrs.id, 10);
-    const product = Product.getById(productId);
-    const loading = Product.loading();
-    const error = Product.error();
+    const product = Products.getById(productId);
+    const loading = Products.loading();
+    const error = Products.error();
 
     // Show loading spinner while fetching
     if (loading && !product) {
@@ -55,7 +55,7 @@ export const ProductDetail = {
     // Show not found message if product doesn't exist
     if (!product) {
       return m(Layout, [
-        m('div.error-message', { role: 'alert' }, 'Product not found'),
+        m('div.error-message', { role: 'alert' }, 'Products not found'),
         m('a.back-link', { 
           href: '#!/', 
           oncreate: m.route.link 
@@ -75,9 +75,9 @@ export const ProductDetail = {
         oncreate: m.route.link 
       }, '← Back to Products'),
       
-      // Product detail content
+      // Products detail content
       m('article.product-detail', [
-        // Product image
+        // Products image
         m('div', [
           m('img', { 
             src: product.image, 
@@ -89,9 +89,9 @@ export const ProductDetail = {
           })
         ]),
         
-        // Product information
+        // Products information
         m('div.product-info', [
-          // Product name
+          // Products name
           m('h1', product.name),
           
           // Price

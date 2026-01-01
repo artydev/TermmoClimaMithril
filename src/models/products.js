@@ -4,7 +4,7 @@ import Stream from "mithril-stream";
 // API Configuration
 const API_BASE_URL = "https://dummyjson.com";
 
-export const Product = {
+export const Products = {
   list: Stream([]),
   loading: Stream(false),
   error: Stream(null),
@@ -17,8 +17,8 @@ export const Product = {
    * Fetches 30 products and transforms them to match our app structure
    */
   loadAll() {
-    Product.loading(true);
-    Product.error(null);
+    Products.loading(true);
+    Products.error(null);
 
     return m
       .request({
@@ -54,14 +54,14 @@ export const Product = {
           ],
         }));
 
-        Product.list(transformedProducts);
-        Product.loading(false);
+        Products.list(transformedProducts);
+        Products.loading(false);
         return transformedProducts;
       })
       .catch((error) => {
         console.error("Failed to load products:", error);
-        Product.error("Failed to load products. Please try again.");
-        Product.loading(false);
+        Products.error("Failed to load products. Please try again.");
+        Products.loading(false);
         throw error;
       });
   },
@@ -71,8 +71,8 @@ export const Product = {
    * Caches the result in the product list
    */
   loadById(id) {
-    Product.loading(true);
-    Product.error(null);
+    Products.loading(true);
+    Products.error(null);
 
     return m
       .request({
@@ -108,27 +108,27 @@ export const Product = {
         };
 
         // Add to list cache if not already there
-        const currentList = Product.list();
+        const currentList = Products.list();
         const existingIndex = currentList.findIndex(
           (p) => p.id === transformedProduct.id
         );
 
         if (existingIndex === -1) {
           // Add new product to list
-          Product.list([...currentList, transformedProduct]);
+          Products.list([...currentList, transformedProduct]);
         } else {
           // Update existing product with fresh data
           currentList[existingIndex] = transformedProduct;
-          Product.list([...currentList]);
+          Products.list([...currentList]);
         }
 
-        Product.loading(false);
+        Products.loading(false);
         return transformedProduct;
       })
       .catch((error) => {
         console.error("Failed to load product:", error);
-        Product.error("Failed to load product details. Please try again.");
-        Product.loading(false);
+        Products.error("Failed to load product details. Please try again.");
+        Products.loading(false);
         throw error;
       });
   },
@@ -142,8 +142,8 @@ export const Product = {
       return this.loadAll();
     }
 
-    Product.loading(true);
-    Product.error(null);
+    Products.loading(true);
+    Products.error(null);
 
     return m
       .request({
@@ -177,14 +177,14 @@ export const Product = {
           ],
         }));
 
-        Product.list(transformedProducts);
-        Product.loading(false);
+        Products.list(transformedProducts);
+        Products.loading(false);
         return transformedProducts;
       })
       .catch((error) => {
         console.error("Search failed:", error);
-        Product.error("Search failed. Please try again.");
-        Product.loading(false);
+        Products.error("Search failed. Please try again.");
+        Products.loading(false);
         throw error;
       });
   },
@@ -194,7 +194,7 @@ export const Product = {
    * Returns null if not found in cache
    */
   getById(id) {
-    return Product.list().find((p) => p.id === parseInt(id, 10));
+    return Products.list().find((p) => p.id === parseInt(id, 10));
   },
 
   /**
@@ -202,10 +202,10 @@ export const Product = {
    * Applies search term, category filter, and sorting
    */
   getFiltered() {
-    let products = Product.list();
+    let products = Products.list();
 
     // Apply search filter
-    const searchTerm = Product.searchTerm().toLowerCase().trim();
+    const searchTerm = Products.searchTerm().toLowerCase().trim();
     if (searchTerm) {
       products = products.filter(
         (product) =>
@@ -216,13 +216,13 @@ export const Product = {
     }
 
     // Apply category filter
-    const category = Product.filterCategory();
+    const category = Products.filterCategory();
     if (category !== "all") {
       products = products.filter((product) => product.category === category);
     }
 
     // Apply sorting
-    const sortBy = Product.sortBy();
+    const sortBy = Products.sortBy();
     products = [...products].sort((a, b) => {
       switch (sortBy) {
         case "price-low":
@@ -243,7 +243,7 @@ export const Product = {
    * Returns array with "all" plus all unique categories
    */
   getCategories() {
-    const categories = new Set(Product.list().map((p) => p.category));
+    const categories = new Set(Products.list().map((p) => p.category));
     return ["all", ...Array.from(categories)];
   },
 };

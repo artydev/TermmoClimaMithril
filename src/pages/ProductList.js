@@ -1,5 +1,5 @@
 import m from "mithril";
-import { Product } from "../models/product.js";
+import { Products } from "../models/products.js";
 import { Cart } from "../models/cart.js";
 import { CONSTANTS } from "../utils/constants.js";
 import { Utils } from "../utils/helpers.js";
@@ -7,23 +7,24 @@ import { Layout } from "../components/Layout.js";
 import { Loading } from "../components/Loading.js";
 import { SearchBar } from "../components/SearchBar.js";
 import { FilterControls } from "../components/FilterControls.js";
+
 export const ProductList = {
   oninit() {
     const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
-    const lastFetch = Product.lastFetchTime || 0;
+    const lastFetch = Products.lastFetchTime || 0;
     const now = Date.now();
 
-    if (Product.list().length === 0 || now - lastFetch > CACHE_DURATION_MS) {
-        Product.loadAll().then(() => {
-            Product.lastFetchTime = Date.now();
+    if (Products.list().length === 0 || now - lastFetch > CACHE_DURATION_MS) {
+        Products.loadAll().then(() => {
+            Products.lastFetchTime = Date.now();
         });
     }
   },
   
   view() {
-    const l = Product.loading(),
-      e = Product.error(),
-      p = Product.getFiltered();
+    const l = Products.loading(),
+      e = Products.error(),
+      p = Products.getFiltered();
     return m(Layout, [
       m("h1", "Our Products"),
       m(SearchBar),
