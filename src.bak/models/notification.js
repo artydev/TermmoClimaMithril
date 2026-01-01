@@ -1,0 +1,1 @@
+import m from'mithril';import Stream from'mithril-stream';import{CONSTANTS}from'../utils/constants.js';export const Notification={current:Stream(null),show(msg,type='success'){Notification.current({message:msg,type});setTimeout(()=>{Notification.current(null);m.redraw()},CONSTANTS.NOTIFICATION_DURATION)}};
