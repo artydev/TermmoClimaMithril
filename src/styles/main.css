@@ -2,8 +2,8 @@
 
 
 :root {
-  --primary-color: #3498db;
-  --primary-hover: #2980b9;
+  --primary-color: #008040;
+  --primary-hover: #00a556;
   --success-color: #27ae60;
   --success-hover: #229954;
   --danger-color: #e74c3c;
@@ -11,13 +11,13 @@
   --text-primary: #333;
   --text-secondary: #555;
   --text-muted: #7f8c8d;
-  --border-color: #ddd;
+  --border-color: var(--primary-color );
   --background-light: #f8f9fa;
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
   --transition-speed: 0.2s;
-  --border-radius: 8px;
+  --border-radius: 3px;
   --max-width: 1200px;
 }
 * {
@@ -45,43 +45,7 @@ body {
 .skip-link:focus {
   top: 0;
 }
-/*
-nav {
-  background: var(--text-primary);
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: var(--shadow-md);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-nav .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 1rem;
-  transition: opacity var(--transition-speed);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-nav a:hover {
-  opacity: 0.8;
-}
-nav a:focus {
-  outline: 2px solid white;
-  outline-offset: 4px;
-}
-  */
+
 .cart-badge {
   background: var(--danger-color);
   padding: 0.25rem 0.5rem;
@@ -178,7 +142,7 @@ nav a:focus {
   flex-direction: column;
 }
 .product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 .product-card:focus-within {
