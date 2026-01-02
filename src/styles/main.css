@@ -1,3 +1,6 @@
+
+
+
 :root {
   --primary-color: #3498db;
   --primary-hover: #2980b9;
@@ -42,6 +45,7 @@ body {
 .skip-link:focus {
   top: 0;
 }
+/*
 nav {
   background: var(--text-primary);
   color: white;
@@ -77,6 +81,7 @@ nav a:focus {
   outline: 2px solid white;
   outline-offset: 4px;
 }
+  */
 .cart-badge {
   background: var(--danger-color);
   padding: 0.25rem 0.5rem;
