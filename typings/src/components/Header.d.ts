@@ -1,7 +1,5 @@
 
-declare interface HeaderType {
-	view(): null;
-}
+declare interface HeaderType {}
 
 declare interface HeaderType {
 	view(): null;

@@ -27,31 +27,40 @@ export const Header = {
 */
 
 export const Header = {
-  view() {
-    return m("header", { class: "header", id: "header" }, [
-      m(
-        "div",
-        { class: "left" },
-        m("img", {
-          class: "logo",
-          src: "https://termoclimavite.vercel.app/assets/logo.jpg",
-          alt: "Logo",
-        })
-      ),
-      m("nav", { class: "center", id: "mainMenu" }, [
-        m("a", { href: "#home" }, "Home"),
-        m("a", { href: "#products" }, "Products"),
-        m("a", { href: "#services" }, "Services"),
-        m("a", { href: "#contact" }, "Contact"),
-      ]),
-      m("div", { class: "right" }, [
-        m("button", { class: "search", "aria-label": "Search" }, "🔍"),
-        m(
-          "button",
-          { class: "burger", id: "burger", "aria-label": "Menu" },
-          "☰"
-        ),
-      ]),
-    ]);
-  },
+    view() {
+        const c = Cart.getCount();
+        
+        return m("header", { class: "header", id: "header" }, [
+            m(
+                "div",
+                { class: "left" },
+                m("img", {
+                    class: "logo",
+                    src: "https://termoclimavite.vercel.app/assets/logo.jpg",
+                    alt: "Logo",
+                })
+            ),
+            m("nav", { class: "center", id: "mainMenu" }, [
+                m("a", { href: "#home" }, "Home"),
+                m("a", { href: "#products" }, "Products"),
+                m("a", { href: "#services" }, "Services"),
+                m("a", { href: "#contact" }, "Contact"),
+            ]),
+            m("div", { class: "right" }, [
+                m("a", { "href": "#!/cart", "aria-label": "Shopping cart with 1 items" },
+                    [
+                        "🛒 Cart ",
+                        m("span", { "class": "cart-badge" },
+                           c
+                        )
+                    ]
+                ),
+                m(
+                    "button",
+                    { class: "burger", id: "burger", "aria-label": "Menu" },
+                    "☰"
+                ),
+            ]),
+        ]);
+    },
 };
